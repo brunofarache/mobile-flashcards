@@ -3,6 +3,7 @@ import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import database from './util/database';
 
 function Deck() {
 	const deckName = useNavigationParam('deckName');
@@ -16,8 +17,10 @@ function Deck() {
 
 function Decks() {
 	return (
-		<View style={styles.container}>
-			<Text>Decks</Text>
+		<View style={styles.container}>			
+			{Object.values(database.getDecks()).map(deck => 
+				<Text key={deck.title}>{deck.title}</Text>
+			)}
 		</View>
 	);
 }
