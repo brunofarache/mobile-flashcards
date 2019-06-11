@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
 function Decks() {
 	return (
@@ -20,8 +21,21 @@ function AddDeck() {
 
 export default function App() {
 	const TabNavigator = createBottomTabNavigator({
-		Home: Decks,
-		AddDeck: AddDeck
+		Decks: {
+			screen: Decks,
+			navigationOptions: {
+				tabBarIcon: ({ tintColor }) =>
+					<MaterialCommunityIcons name="cards" size={30} color={tintColor} />
+			},
+		},
+		AddDeck: {
+			screen: AddDeck,
+			navigationOptions: {
+				tabBarLabel: 'Add Deck',
+				tabBarIcon: ({ tintColor }) =>
+					<FontAwesome name="plus-square" size={30} color={tintColor} />
+			},
+		}
 	});
 
 	const AppContainer = createAppContainer(TabNavigator);
