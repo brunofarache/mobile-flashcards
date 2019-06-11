@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
+import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+
+function Deck() {
+	const deckName = useNavigationParam('deckName');
+
+	return (
+		<View style={styles.container}>
+			<Text>{deckName}</Text>
+		</View>
+	);
+}
 
 function Decks() {
 	return (
@@ -13,9 +24,10 @@ function Decks() {
 
 function AddDeck() {
 	const [deckName, setDeckName] = useState('');
+	const { navigate } = useNavigation();
 
 	const onPressCreateDeck = () => {
-		alert(deckName);
+		navigate('Deck', { deckName });
 	};
 
 	return (
@@ -57,7 +69,19 @@ export default function App() {
 		}
 	);
 
-	const AppContainer = createAppContainer(TabNavigator);
+	const StackNavigator = createStackNavigator({
+		Home: {
+			screen: TabNavigator,
+			navigationOptions: {
+				header: null,
+			}
+		},
+		Deck: {
+			screen: Deck
+		}
+	});
+
+	const AppContainer = createAppContainer(StackNavigator);
 
 	return (
 		<AppContainer />
