@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
@@ -16,9 +16,18 @@ function Deck() {
 }
 
 function Decks() {
+	const [decks, setDecks] = useState([]);
+
+	useEffect(() => {
+		database.getDecks()
+			.then((decks) => {
+				setDecks(decks);
+			});
+  	});
+
 	return (
 		<View style={styles.container}>			
-			{Object.values(database.getDecks()).map(deck => 
+			{Object.values(decks).map(deck => 
 				<Text key={deck.title}>{deck.title}</Text>
 			)}
 		</View>
@@ -30,7 +39,10 @@ function AddDeck() {
 	const { navigate } = useNavigation();
 
 	const onPressCreateDeck = () => {
-		navigate('Deck', { deckName });
+		database.saveDeckTitle(deckName)
+			.then(() => {
+				navigate('Deck', { deckName });
+			});
 	};
 
 	return (
