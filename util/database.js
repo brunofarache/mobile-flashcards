@@ -27,17 +27,17 @@ const _DEFAULT_DECKS = {
 	}
 }
 
-const getDecks  = async () => {
+const getDecks = async () => {
 	try {
 		const decks = await AsyncStorage.getItem(DECKS_KEY);
 		
 		if (decks !== null) {
-			return JSON.parse(decks);
+			return Object.values(JSON.parse(decks));
 		}
 
 		await AsyncStorage.setItem(DECKS_KEY, JSON.stringify(_DEFAULT_DECKS));
 
-		return _DEFAULT_DECKS;
+		return Object.values(_DEFAULT_DECKS);
 	}
 	catch (e) {
 		console.error(e);

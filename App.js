@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -23,13 +23,23 @@ function Decks() {
 			.then((decks) => {
 				setDecks(decks);
 			});
-  	});
+		  },
+		  []
+	);
 
 	return (
-		<View style={styles.container}>			
-			{Object.values(decks).map(deck => 
-				<Text key={deck.title}>{deck.title}</Text>
-			)}
+		<View>
+			<FlatList
+				data={decks}
+				renderItem={
+					({item}) => (
+						<View>
+							<Text>{item.title}</Text>
+							<Text>{item.questions.length} cards</Text>
+						</View>
+					)}
+				keyExtractor={(_, index) => index.toString()}
+			/>
 		</View>
 	);
 }
@@ -80,7 +90,7 @@ export default function App() {
 			}
 		},
 		{
-			initialRouteName: 'AddDeck'
+			initialRouteName: 'Decks'
 		}
 	);
 
