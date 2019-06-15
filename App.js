@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, FlatList, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -26,16 +26,24 @@ function Decks() {
 		  }, []
 	);
 
+	const { navigate } = useNavigation();
+
+	const onPressItem = (title) => {
+		navigate('Deck', { deckName: title });
+	}
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<FlatList
 				data={decks}
 				renderItem={
 					({item}) => (
-						<View style={[styles.container, {height: 80, width: 400}]}>
-							<Text style>{item.title}</Text>
-							<Text>{item.questions.length} cards</Text>
-						</View>
+						<TouchableOpacity onPress={() => onPressItem(item.title)}>
+							<View style={[styles.container, {height: 80, width: 400}]}>
+								<Text style>{item.title}</Text>
+								<Text>{item.questions.length} cards</Text>
+							</View>
+						</TouchableOpacity>
 					)}
 				keyExtractor={(_, index) => index.toString()}
 				ItemSeparatorComponent={({}) => (
