@@ -27,6 +27,20 @@ const _DEFAULT_DECKS = {
 	}
 }
 
+const addCardToDeck = async (title, card) => {
+	try {
+		const decks = JSON.parse(await AsyncStorage.getItem(DECKS_KEY));
+		const deck = decks[title];
+		console.log(title)
+		deck.questions.push(card);
+
+		await AsyncStorage.setItem(DECKS_KEY, JSON.stringify(decks));
+	}
+	catch (e) {
+		console.error(e);
+	}
+}
+
 const getDecks = async () => {
 	try {
 		const decks = await AsyncStorage.getItem(DECKS_KEY);
@@ -64,6 +78,7 @@ const saveDeckTitle = async (title) => {
 }
 
 export default {
+	addCardToDeck,
 	getDecks,
 	saveDeckTitle
 }

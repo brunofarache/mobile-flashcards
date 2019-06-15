@@ -5,15 +5,53 @@ import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import database from './util/database';
 
+function AddCard() {
+	const [question, setQuestion] = useState('');
+	const [answer, setAnswer] = useState('');
+	const title = useNavigationParam('title');
+	const { goBack } = useNavigation();
+
+	const onPressSubmit = () => {
+		database.addCardToDeck(title, { question, answer })
+			.then(() => {
+				goBack(null);
+			});
+	};
+
+	return (
+		<View style={styles.container}>
+			<Text>Question</Text>
+			<TextInput
+				style={styles.input}
+				onChangeText={(text) => setQuestion(text)}
+			/>
+			<Text>Answer</Text>
+			<TextInput
+				style={styles.input}
+				onChangeText={(text) => setAnswer(text)}
+			/>
+			<Button
+				title="Submit"
+				onPress={onPressSubmit}
+			/>
+		</View>
+	);
+}
+
 function Deck() {
 	const title = useNavigationParam('title');
+	const { navigate } = useNavigation();
+
+	const onPressAddCard = (title) => {
+		navigate('AddCard', { title });
+	}
 
 	return (
 		<View style={styles.container}>
 			<Text>{title}</Text>
 			<Button
 				title="Add Card"
-				// onPress={onPressAddCard}
+				onPress={() => onPressAddCard(title)}
 			/>
 		</View>
 	);
@@ -73,7 +111,7 @@ function AddDeck() {
 		<View style={styles.container}>
 			<Text>What's the title of your new deck?</Text>
 			<TextInput
-				style={{height: 40, width: 300, borderColor: 'gray', borderWidth: 1}}
+				style={styles.input}
 				onChangeText={(text) => setTitle(text)}
 			/>
 			<Button
@@ -117,6 +155,9 @@ export default function App() {
 		},
 		Deck: {
 			screen: Deck
+		},
+		AddCard: {
+			screen: AddCard
 		}
 	});
 
@@ -133,6 +174,12 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center'
+	},
+	input: {
+		height: 40,
+		width: 300,
+		borderColor: 'gray',
+		borderWidth: 1
 	},
 	separator: {
 		height: 1,
