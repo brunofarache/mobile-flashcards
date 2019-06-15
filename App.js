@@ -1,42 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Button, FlatList, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import database from './util/database';
-
-function AddCard() {
-	const [question, setQuestion] = useState('');
-	const [answer, setAnswer] = useState('');
-	const title = useNavigationParam('title');
-	const { goBack } = useNavigation();
-
-	const onPressSubmit = () => {
-		database.addCardToDeck(title, { question, answer })
-			.then(() => {
-				goBack(null);
-			});
-	};
-
-	return (
-		<View style={styles.container}>
-			<Text>Question</Text>
-			<TextInput
-				style={styles.input}
-				onChangeText={(text) => setQuestion(text)}
-			/>
-			<Text>Answer</Text>
-			<TextInput
-				style={styles.input}
-				onChangeText={(text) => setAnswer(text)}
-			/>
-			<Button
-				title="Submit"
-				onPress={onPressSubmit}
-			/>
-		</View>
-	);
-}
+import styles from './util/styles';
+import AddCard from './components/AddCard';
 
 function Deck() {
 	const title = useNavigationParam('title');
@@ -167,23 +136,3 @@ export default function App() {
 		<AppContainer />
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	input: {
-		height: 40,
-		width: 300,
-		borderColor: 'gray',
-		borderWidth: 1
-	},
-	separator: {
-		height: 1,
-		width: "100%",
-		backgroundColor: "#CED0CE",
-	}
-});
