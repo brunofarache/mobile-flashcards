@@ -19,7 +19,7 @@ function Decks(props) {
 	const { navigate } = useNavigation();
 
 	const onPressItem = (deck) => {
-		navigate('Deck', { deck });
+		navigate('Deck', deck.title);
 	}
 
 	return (

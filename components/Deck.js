@@ -1,10 +1,12 @@
 import React from 'react';
 import { Button, Text, View } from 'react-native';
-import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
+import { useNavigation } from 'react-navigation-hooks';
 import styles from '../util/styles';
 
-export default function Deck() {
-	const deck = useNavigationParam('deck');
+import { connect } from 'react-redux'
+
+function Deck(props) {
+	const { deck } = props;
 	const { navigate } = useNavigation();
 
 	const onPressAddCard = (deck) => {
@@ -23,3 +25,13 @@ export default function Deck() {
 		</View>
 	);
 }
+
+function mapStateToProps(state, { navigation }) {
+	const { state: { params: title } } = navigation;
+
+	return {
+		deck: state.find((deck) => deck.title === title)
+	 };
+}
+
+export default connect(mapStateToProps)(Deck);

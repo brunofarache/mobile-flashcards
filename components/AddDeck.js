@@ -13,12 +13,9 @@ function AddDeck(props) {
 
 	const onPressCreateDeck = () => {
 		database.saveDeckTitle(title)
-			.then((deck) => {	
-				navigate('Deck', { deck });
-				return database.getDecks();
-			})
 			.then((decks) => {
 				props.dispatch(getDecks(decks));
+				navigate('Deck', title);
 			});
 	};
 
