@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, FlatList, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -23,24 +23,26 @@ function Decks() {
 			.then((decks) => {
 				setDecks(decks);
 			});
-		  },
-		  []
+		  }, []
 	);
 
 	return (
-		<View>
+		<SafeAreaView style={styles.container}>
 			<FlatList
 				data={decks}
 				renderItem={
 					({item}) => (
-						<View>
-							<Text>{item.title}</Text>
+						<View style={[styles.container, {height: 80, width: 400}]}>
+							<Text style>{item.title}</Text>
 							<Text>{item.questions.length} cards</Text>
 						</View>
 					)}
 				keyExtractor={(_, index) => index.toString()}
+				ItemSeparatorComponent={({}) => (
+					<View style={styles.separator} />
+				)}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }
 
@@ -118,6 +120,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#fff',
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'center'
 	},
+	separator: {
+		height: 1,
+		width: "100%",
+		backgroundColor: "#CED0CE",
+	}
 });
