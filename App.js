@@ -6,11 +6,15 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import database from './util/database';
 
 function Deck() {
-	const deckName = useNavigationParam('deckName');
+	const title = useNavigationParam('title');
 
 	return (
 		<View style={styles.container}>
-			<Text>{deckName}</Text>
+			<Text>{title}</Text>
+			<Button
+				title="Add Card"
+				// onPress={onPressAddCard}
+			/>
 		</View>
 	);
 }
@@ -29,7 +33,7 @@ function Decks() {
 	const { navigate } = useNavigation();
 
 	const onPressItem = (title) => {
-		navigate('Deck', { deckName: title });
+		navigate('Deck', { title });
 	}
 
 	return (
@@ -55,13 +59,13 @@ function Decks() {
 }
 
 function AddDeck() {
-	const [deckName, setDeckName] = useState('');
+	const [title, setTitle] = useState('');
 	const { navigate } = useNavigation();
 
 	const onPressCreateDeck = () => {
-		database.saveDeckTitle(deckName)
+		database.saveDeckTitle(title)
 			.then(() => {
-				navigate('Deck', { deckName });
+				navigate('Deck', { title });
 			});
 	};
 
@@ -70,7 +74,7 @@ function AddDeck() {
 			<Text>What's the title of your new deck?</Text>
 			<TextInput
 				style={{height: 40, width: 300, borderColor: 'gray', borderWidth: 1}}
-				onChangeText={(text) => setDeckName(text)}
+				onChangeText={(text) => setTitle(text)}
 			/>
 			<Button
 				title="Create Deck"
