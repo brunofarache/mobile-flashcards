@@ -4,13 +4,17 @@ import { useNavigation } from 'react-navigation-hooks';
 import database from '../util/database';
 import styles from '../util/styles';
 
-export default function AddDeck() {
+import { connect } from 'react-redux'
+import { getDecks } from '../actions'
+
+function AddDeck(props) {
 	const [title, setTitle] = useState('');
 	const { navigate } = useNavigation();
 
 	const onPressCreateDeck = () => {
 		database.saveDeckTitle(title)
-			.then(() => {
+			.then((decks) => {
+				props.dispatch(getDecks(decks));
 				navigate('Deck', { title });
 			});
 	};
@@ -29,3 +33,5 @@ export default function AddDeck() {
 		</View>
 	);
 }
+
+export default connect()(AddDeck);

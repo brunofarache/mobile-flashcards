@@ -7,6 +7,10 @@ import AddDeck from './components/AddDeck';
 import Deck from './components/Deck';
 import Decks from './components/Decks';
 
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./reducers";
+
 export default function App() {
 	const TabNavigator = createBottomTabNavigator(
 		{
@@ -49,6 +53,8 @@ export default function App() {
 	const AppContainer = createAppContainer(StackNavigator);
 
 	return (
-		<AppContainer />
+		<Provider store={createStore(reducer)}>
+			<AppContainer />
+		</Provider>
 	);
 }

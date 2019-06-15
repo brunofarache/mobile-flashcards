@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 import database from '../util/database';
 import styles from '../util/styles';
 
-export default function Decks() {
-	const [decks, setDecks] = useState([]);
+import { connect } from 'react-redux'
+import { getDecks } from '../actions'
 
+function Decks(props) {
 	useEffect(() => {
 		database.getDecks()
 			.then((decks) => {
-				setDecks(decks);
+				props.dispatch(getDecks(decks));
 			});
 		  }, []
 	);
@@ -24,7 +25,7 @@ export default function Decks() {
 	return (
 		<SafeAreaView style={styles.container}>
 			<FlatList
-				data={decks}
+				data={props.decks}
 				renderItem={
 					({item}) => (
 						<TouchableOpacity onPress={() => onPressItem(item.title)}>
@@ -42,3 +43,11 @@ export default function Decks() {
 		</SafeAreaView>
 	);
 }
+
+function mapStateToProps(decks) {
+	return {
+		decks
+	}
+}
+
+export default connect(mapStateToProps)(Decks);
