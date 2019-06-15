@@ -4,7 +4,10 @@ import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import database from '../util/database';
 import styles from '../util/styles';
 
-export default function AddCard() {
+import { connect } from 'react-redux'
+import { getDecks } from '../actions'
+
+function AddCard(props) {
 	const [question, setQuestion] = useState('');
 	const [answer, setAnswer] = useState('');
 	const title = useNavigationParam('title');
@@ -12,7 +15,8 @@ export default function AddCard() {
 
 	const onPressSubmit = () => {
 		database.addCardToDeck(title, { question, answer })
-			.then(() => {
+			.then((decks) => {
+                props.dispatch(getDecks(decks));
 				goBack(null);
 			});
 	};
@@ -36,3 +40,5 @@ export default function AddCard() {
 		</View>
 	);
 }
+
+export default connect()(AddCard);
