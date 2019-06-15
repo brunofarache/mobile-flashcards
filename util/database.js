@@ -30,14 +30,17 @@ const _DEFAULT_DECKS = {
 const getDecks = async () => {
 	try {
 		const decks = await AsyncStorage.getItem(DECKS_KEY);
-		
+		let result;
+
 		if (decks !== null) {
-			return Object.values(JSON.parse(decks));
+			result = Object.values(JSON.parse(decks));
+		}
+		else {
+			await AsyncStorage.setItem(DECKS_KEY, JSON.stringify(_DEFAULT_DECKS));
+			result = Object.values(_DEFAULT_DECKS);
 		}
 
-		await AsyncStorage.setItem(DECKS_KEY, JSON.stringify(_DEFAULT_DECKS));
-
-		return Object.values(_DEFAULT_DECKS);
+		return result.sort((a, b) => (a.title === b.title) ? 0 : (a.title < b.title) ? -1 : 1);
 	}
 	catch (e) {
 		console.error(e);
