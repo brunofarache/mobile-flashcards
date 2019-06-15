@@ -4,19 +4,21 @@ import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import styles from '../util/styles';
 
 export default function Deck() {
-	const title = useNavigationParam('title');
+	const deck = useNavigationParam('deck');
 	const { navigate } = useNavigation();
 
-	const onPressAddCard = (title) => {
+	const onPressAddCard = (deck) => {
+		const { title } = deck;
 		navigate('AddCard', { title });
 	}
 
 	return (
 		<View style={styles.container}>
-			<Text>{title}</Text>
+			<Text>{deck.title}</Text>
+			<Text>{deck.questions.length} cards</Text>
 			<Button
 				title="Add Card"
-				onPress={() => onPressAddCard(title)}
+				onPress={() => onPressAddCard(deck)}
 			/>
 		</View>
 	);

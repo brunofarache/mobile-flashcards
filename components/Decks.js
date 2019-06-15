@@ -18,8 +18,8 @@ function Decks(props) {
 
 	const { navigate } = useNavigation();
 
-	const onPressItem = (title) => {
-		navigate('Deck', { title });
+	const onPressItem = (deck) => {
+		navigate('Deck', { deck });
 	}
 
 	return (
@@ -28,7 +28,7 @@ function Decks(props) {
 				data={props.decks}
 				renderItem={
 					({item}) => (
-						<TouchableOpacity onPress={() => onPressItem(item.title)}>
+						<TouchableOpacity onPress={() => onPressItem(item)}>
 							<View style={[styles.container, {height: 80, width: 400}]}>
 								<Text style>{item.title}</Text>
 								<Text>{item.questions.length} cards</Text>

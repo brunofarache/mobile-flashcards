@@ -71,7 +71,7 @@ const saveDeckTitle = async (title) => {
 
 	try {
 		await AsyncStorage.mergeItem(DECKS_KEY, JSON.stringify(deck));
-		return getDecks();
+		return deck[title];
 	}
 	catch (e) {
 		console.error(e);
