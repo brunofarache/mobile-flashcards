@@ -5,16 +5,15 @@ import styles from '../util/styles';
 
 export default function Quiz() {
 	const deck = useNavigationParam('deck');
+	const { goBack } = useNavigation();
 	
-	const [quizState, setQuizState] = useState({
+	const initialState = {
 		score: 0,
 		currentQuestion: 1,
 		showAnswer: false
-	});
+	};
 
-	console.log('deck', deck);
-	
-	const question = deck.questions[quizState.currentQuestion - 1];
+	const [quizState, setQuizState] = useState(initialState);
 
 	const toggleAnswer = () => {
 		setQuizState((prevState) => {
@@ -36,6 +35,24 @@ export default function Quiz() {
 	};
 
 	const { currentQuestion, score, showAnswer } = quizState;
+
+	if (currentQuestion > deck.questions.length) {
+		return (
+			<View style={styles.container}>
+				<Text>Score: {score} correct answers</Text>
+				<Button
+					title="Restart Quiz"
+					onPress={() => setQuizState(initialState)}
+				/>
+				<Button
+					title="Back to Deck"
+					onPress={() => goBack(null)}
+				/>
+			</View>	
+		);
+	}
+
+	const question = deck.questions[quizState.currentQuestion - 1];
 
 	return (
 		<View style={styles.container}>
