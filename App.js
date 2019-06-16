@@ -6,6 +6,7 @@ import AddCard from './components/AddCard';
 import AddDeck from './components/AddDeck';
 import Deck from './components/Deck';
 import Decks from './components/Decks';
+import Quiz from './components/Quiz';
 
 import { createStore } from "redux";
 import { Provider } from "react-redux";
@@ -47,6 +48,9 @@ export default function App() {
 		},
 		AddCard: {
 			screen: AddCard
+		},
+		Quiz: {
+			screen: Quiz
 		}
 	});
 

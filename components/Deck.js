@@ -9,18 +9,17 @@ function Deck(props) {
 	const { deck } = props;
 	const { navigate } = useNavigation();
 
-	const onPressAddCard = (deck) => {
-		const { title } = deck;
-		navigate('AddCard', { title });
-	}
-
 	return (
 		<View style={styles.container}>
 			<Text>{deck.title}</Text>
 			<Text>{deck.questions.length} cards</Text>
 			<Button
 				title="Add Card"
-				onPress={() => onPressAddCard(deck)}
+				onPress={() => navigate('AddCard', { title: deck.title })}
+			/>
+			<Button
+				title="Start Quiz"
+				onPress={() => navigate('Quiz', { deck })}
 			/>
 		</View>
 	);
