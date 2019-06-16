@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
+
+import database from '../util/database';
 import styles from '../util/styles';
 
 export default function Quiz() {
@@ -37,6 +39,8 @@ export default function Quiz() {
 	const { currentQuestion, score, showAnswer } = quizState;
 
 	if (currentQuestion > deck.questions.length) {
+		database.clearReminder();
+
 		return (
 			<View style={styles.container}>
 				<Text>Score: {score} correct answers</Text>

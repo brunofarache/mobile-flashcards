@@ -1,6 +1,8 @@
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage } from 'react-native';
+import { Notifications, Permissions } from 'expo';
 
 const DECKS_KEY = 'decks';
+const REMINDER_KEY = 'reminder';
 
 const _DEFAULT_DECKS = {
 	React: {
@@ -27,7 +29,7 @@ const _DEFAULT_DECKS = {
 	}
 }
 
-const addCardToDeck = async (title, card) => {
+export const addCardToDeck = async (title, card) => {
 	try {
 		const decks = JSON.parse(await AsyncStorage.getItem(DECKS_KEY));
 		const deck = decks[title];
@@ -41,7 +43,7 @@ const addCardToDeck = async (title, card) => {
 	}
 }
 
-const getDecks = async () => {
+export const getDecks = async () => {
 	try {
 		const decks = await AsyncStorage.getItem(DECKS_KEY);
 		let result;
@@ -61,7 +63,7 @@ const getDecks = async () => {
 	}
 }
 
-const saveDeckTitle = async (title) => {
+export const saveDeckTitle = async (title) => {
 	const deck = {
 		[title]: {
 			title,
@@ -78,8 +80,58 @@ const saveDeckTitle = async (title) => {
 	}
 }
 
+export const clearReminder = () => {
+	return AsyncStorage.removeItem(REMINDER_KEY)
+		.then(Notifications.cancelAllScheduledNotificationsAsync);
+}
+
+export const setReminder = async () => {
+	const reminder = await AsyncStorage.getItem(REMINDER_KEY);
+
+	if (reminder !== null) {
+		return;
+	}
+
+	const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+
+	if (status !== 'granted') {
+		return;
+	}
+
+	Notifications.cancelAllScheduledNotificationsAsync();
+
+	let today = new Date();
+	today.setMinutes(today.getMinutes() + 1);
+
+	const notification = {
+		title: 'Time to study!',
+		body: "You haven't taken a quiz today yet.",
+		ios: {
+			sound: true,
+		},
+		android: {
+			sound: true,
+			priority: 'high',
+			sticky: false,
+			vibrate: true,
+		}
+	};
+
+	Notifications.scheduleLocalNotificationAsync(
+		notification,
+		{
+			time: today,
+			repeat: 'day'
+		}
+	);
+
+	AsyncStorage.setItem(REMINDER_KEY, JSON.stringify(true));
+}
+
 export default {
 	addCardToDeck,
 	getDecks,
-	saveDeckTitle
+	saveDeckTitle,
+	clearReminder,
+	setReminder
 }
